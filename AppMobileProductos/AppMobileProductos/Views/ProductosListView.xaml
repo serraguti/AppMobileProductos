@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppMobileProductos.Views.ProductosListView"
+             xmlns:viewmodels="clr-namespace:AppMobileProductos.ViewModels">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <viewmodels:ProductosListViewModel/>
+            </StackLayout.BindingContext>
+            <Label Text="Productos Api"
+                VerticalOptions="Start" FontSize="30"
+                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Cargar Productos"
+                    Command="{Binding CargarProductos}"/>
+            <ListView ItemsSource="{Binding Productos}"
+                      RowHeight="150">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="{Binding Imagen}"
+                                       HeightRequest="145"/>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Nombre}" TextColor="Blue"/>
+                                    <Label Text="{Binding Precio}" TextColor="Red"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
