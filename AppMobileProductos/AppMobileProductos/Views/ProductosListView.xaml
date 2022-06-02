@@ -2,12 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppMobileProductos.Views.ProductosListView"
-             xmlns:viewmodels="clr-namespace:AppMobileProductos.ViewModels">
+             xmlns:viewmodels="clr-namespace:AppMobileProductos.ViewModels"
+             xmlns:local="clr-namespace:AppMobileProductos">
     <ContentPage.Content>
-        <StackLayout>
-            <StackLayout.BindingContext>
-                <viewmodels:ProductosListViewModel/>
-            </StackLayout.BindingContext>
+        <StackLayout x:Name="stackProductos"
+            BindingContext="{Binding Source={x:Static local:App.ServiceLocator}
+            , Path=ProductosListViewModel}">
             <Label Text="Productos Api"
                 VerticalOptions="Start" FontSize="30"
                 HorizontalOptions="CenterAndExpand" />
@@ -24,6 +24,14 @@
                                 <StackLayout Orientation="Vertical">
                                     <Label Text="{Binding Nombre}" TextColor="Blue"/>
                                     <Label Text="{Binding Precio}" TextColor="Red"/>
+                                    <Button Text="Details"
+                                            Command="{Binding BindingContext.ShowProductDetails
+                                        , Source={x:Reference stackProductos}}"
+                                            CommandParameter="{Binding IdProducto}"/>
+                                    <Button Text="Delete" TextColor="Red"
+                                            Command="{Binding BindingContext.DeleteProduct
+                                        , Source={x:Reference stackProductos}}"
+                                            CommandParameter="{Binding IdProducto}"/>
                                 </StackLayout>
                             </StackLayout>
                         </ViewCell>

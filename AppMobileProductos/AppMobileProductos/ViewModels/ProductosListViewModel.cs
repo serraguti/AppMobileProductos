@@ -1,6 +1,7 @@
 ﻿using AppMobileProductos.Base;
 using AppMobileProductos.Models;
 using AppMobileProductos.Services;
+using AppMobileProductos.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,9 +14,50 @@ namespace AppMobileProductos.ViewModels
     public class ProductosListViewModel: ViewModelBase
     {
         private ServiceApiProductos service;
-        public ProductosListViewModel()
+        public ProductosListViewModel(ServiceApiProductos service)
         {
-            this.service = new ServiceApiProductos();
+            this.service = service;
+        }
+
+        public Command DeleteProduct
+        {
+            get
+            {
+                return new Command(async(idProducto) =>
+                {
+                    int id = (int)idProducto;
+                    await this.service.DeleteProductoAsync(id);
+                    await Application.Current.MainPage.DisplayAlert("Alert"
+                        , "Producto eliminado", "Ok");
+                    //RECARGAMOS LOS PRODUCTOS
+                    await this.LoadProductosAsync();
+                });
+            }
+        }
+
+        public Command ShowProductDetails
+        {
+            get
+            {
+                return new Command(async(idProducto) =>
+                {
+                    int id = (int)idProducto;
+                    //BUSCAMOS EL PRODUCTO DENTRO DEL API
+                    Producto producto = await this.service.FindProductoAsync(id);
+                    //CREAMOS EL VIEWMODEL
+                    ProductoDetailsViewModel viewmodel =
+                    new ProductoDetailsViewModel();
+                    //INDICAMOS AL VIEWMODEL QUE ELEMENTO DIBUJARA
+                    viewmodel.Producto = producto;
+                    //CREAMOS LA VISTA DE DETALLES
+                    ProductoDetailsView view = new ProductoDetailsView();
+                    //ENLAZAMOS LA VISTA CON SU VIEWMODEL
+                    view.BindingContext = viewmodel;
+                    //MOSTRAMOS LA VISTA PARA VISUALIZAR SUS DATOS
+                    await Application.Current.MainPage.Navigation
+                    .PushModalAsync(view);
+                });
+            }
         }
 
         public Command CargarProductos

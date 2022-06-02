@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AppMobileProductos.Models;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace AppMobileProductos.Services
 {
@@ -15,9 +16,10 @@ namespace AppMobileProductos.Services
         private MediaTypeWithQualityHeaderValue Header;
 
 
-        public ServiceApiProductos()
+        public ServiceApiProductos(IConfiguration configuration)
         {
-            this.ApiUrl = "https://apiproductoslabs.azurewebsites.net/";
+            //this.ApiUrl = "https://apiproductoslabs.azurewebsites.net/";
+            this.ApiUrl = configuration["ApiUrls:ApiProductos"];
             this.Header =
                 new MediaTypeWithQualityHeaderValue("application/json");
         }
