@@ -16,6 +16,8 @@
                 <Label Text="{Binding Producto.Descripcion}" TextColor="Black"/>
                 <Label Text="{Binding Producto.Precio, StringFormat='Precio {0} €'}"
                        FontSize="25" TextColor="Red"/>
+                <Button Text="Delete" BackgroundColor="Red"
+                        Command="{Binding DeleteProduct}"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

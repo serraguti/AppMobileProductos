@@ -17,6 +17,24 @@ namespace AppMobileProductos.ViewModels
         public ProductosListViewModel(ServiceApiProductos service)
         {
             this.service = service;
+            //CUANDO SE INSTANCIA EL OBJETO, CREAMOS UNA 
+            //SUBSCRIPCION PARA REALIZAR ALGUN CODIGO AUNQUE
+            //NO SEA VISIBLE LA VISTA
+            MessagingCenter.Subscribe<ProductosListViewModel>
+                (this, "RELOAD", async (sender) =>
+                {
+                    //CUANDO RECIBAMOS EL MENSAJE RELOAD
+                    //REALIZARA ESTE CODIGO
+                    await this.LoadProductosAsync();
+                });
+        }
+
+        private async Task LoadProductosAsync()
+        {
+            List<Producto> productos =
+                await this.service.GetProductosAsync();
+            this.Productos =
+                new ObservableCollection<Producto>(productos);
         }
 
         public Command DeleteProduct
@@ -44,9 +62,9 @@ namespace AppMobileProductos.ViewModels
                     int id = (int)idProducto;
                     //BUSCAMOS EL PRODUCTO DENTRO DEL API
                     Producto producto = await this.service.FindProductoAsync(id);
-                    //CREAMOS EL VIEWMODEL
+                    //RECUPERAMOS EL VIEWMODEL
                     ProductoDetailsViewModel viewmodel =
-                    new ProductoDetailsViewModel();
+                    App.ServiceLocator.ProductoDetailsViewModel;
                     //INDICAMOS AL VIEWMODEL QUE ELEMENTO DIBUJARA
                     viewmodel.Producto = producto;
                     //CREAMOS LA VISTA DE DETALLES
@@ -69,14 +87,6 @@ namespace AppMobileProductos.ViewModels
                     await this.LoadProductosAsync();
                 });
             }
-        }
-
-        private async Task LoadProductosAsync()
-        {
-            List<Producto> productos =
-                await this.service.GetProductosAsync();
-            this.Productos =
-                new ObservableCollection<Producto>(productos);
         }
 
         private ObservableCollection<Producto> _Productos;

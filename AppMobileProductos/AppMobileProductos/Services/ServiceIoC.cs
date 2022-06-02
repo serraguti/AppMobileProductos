@@ -24,6 +24,7 @@ namespace AppMobileProductos.Services
                 new ContainerBuilder();
             builder.RegisterType<ServiceApiProductos>();
             builder.RegisterType<ProductosListViewModel>();
+            builder.RegisterType<ProductoDetailsViewModel>();
             string resourceName = "AppMobileProductos.appsettings.json";
             Stream stream = GetType().GetTypeInfo().Assembly.GetManifestResourceStream(resourceName);
             IConfiguration configuration =
@@ -31,6 +32,14 @@ namespace AppMobileProductos.Services
                 .Build();
             builder.Register<IConfiguration>(x => configuration);
             this.container = builder.Build();
+        }
+
+        public ProductoDetailsViewModel ProductoDetailsViewModel
+        {
+            get
+            {
+                return this.container.Resolve<ProductoDetailsViewModel>();
+            }
         }
 
         //PROPIEDADES CON LOS VIEWMODELS PARA PODER RECUPERARLOS DENTRO 
